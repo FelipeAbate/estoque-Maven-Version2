@@ -3,21 +3,17 @@ package abatesolutions.stockdesktop.com.Estoque2024;
 import java.awt.EventQueue;
 
 public class App {
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                LoginScreen loginScreen = new LoginScreen();
-                loginScreen.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
 
-    //DeleteSQL deletePants = new DeleteSQL();
-    //deletePants.deleteInPants(18);  
-
-    //UpdateSQL updateShirts = new UpdateSQL();
-    //updateShirts.update ("adidas", "GG", 63, 58);  
+	public static void main(String[] args) {
+		
+		InsertSQL insertInCamisetas = new InsertSQL();
+        insertInCamisetas.insert();
+        
+        UpdateSQL updateShirts = new UpdateSQL();
+        updateShirts.update("Nike", 67);
+        
+        DeleteSQL deleteInshirts = new DeleteSQL();
+        deleteInshirts.delete_sql(76);
         
 	}
 }
