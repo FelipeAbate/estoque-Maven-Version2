@@ -7,11 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQL_SelectFromShirts {
+public class SelectTablePants {
 	
-	public List<Object[]> selectAllFromCamisetas() {
+	public List<Object[]> selectAllFromPants() {
 	
-    String querySQL = "SELECT * FROM camisetas";
+    String querySQL = "SELECT * FROM calcas";
     List<Object[]> data = new ArrayList<>();
     
     ConnectDB conexaoDB = new ConnectDB();
@@ -23,11 +23,11 @@ public class SQL_SelectFromShirts {
           
             while (rs.next()) {
                 int id = rs.getInt("id");
+                String tipo = rs.getString("tipo");
                 String marca = rs.getString("marca");
-                String tamanho = rs.getString("tamanho");
-                int quant = rs.getInt("quant");
+                int tamanho = rs.getInt("tamanho");
 
-                data.add(new Object[]{id, marca, tamanho, quant});
+                data.add(new Object[]{id, tipo, marca, tamanho});
             }
         } catch (SQLException e) {
             System.err.println("Erro ao executar SELECT: " + e.getMessage());
@@ -42,5 +42,5 @@ public class SQL_SelectFromShirts {
         System.out.println("Não foi possível conectar ao banco de dados.");
     }
 	return data;
-}
+}   
 }

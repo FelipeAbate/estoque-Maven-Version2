@@ -1,111 +1,92 @@
 package abatesolutions.stockdesktop.com.Estoque2024;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Color;
+import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class LoginScreen {
 
-	private JFrame frame;
-	private JTextField textFieldUser;
-	private JTextField textFieldPassword;
+    JFrame frame;
+    private JTextField textFieldUser;
+    private JPasswordField textFieldPassword;
+    private LoginService loginService = new LoginService();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginScreen window = new LoginScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public LoginScreen() {
+        initialize();
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public LoginScreen() {
-		initialize();
-	}
+    private void initialize() {
+        frame = new JFrame
+        ("BOM TRABALHO! PARA CONTINUAR EFETUE O LOGIN DE USUARIO");
+        frame.getContentPane().setBackground(new Color(5, 85, 116));
+        frame.setBounds(-6, 0, 1377, 725);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(255, 128, 255));
-		frame.setBackground(new Color(255, 128, 192));
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		textFieldUser = new JTextField();
-		textFieldUser.setBounds(161, 58, 205, 20);
-		frame.getContentPane().add(textFieldUser);
-		textFieldUser.setColumns(10);
-		
-		textFieldPassword = new JTextField();
-		textFieldPassword.setBounds(161, 112, 205, 20);
-		frame.getContentPane().add(textFieldPassword);
-		textFieldPassword.setColumns(10);
-		
-		JLabel lblUser = new JLabel("Usuário");
-		lblUser.setBounds(95, 61, 46, 14);
-		frame.getContentPane().add(lblUser);
-		
-		JLabel lblPassword = new JLabel("Senha");
-		lblPassword.setBounds(95, 115, 46, 14);
-		frame.getContentPane().add(lblPassword);
-		
-		JButton btnEnter = new JButton("ENTER");
-		btnEnter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                if(checkLogin(textFieldUser.getText(), new String (textFieldPassword.getText()))) {
-					
-					JOptionPane.showMessageDialog(null, "Bem vindo");
-					
-					frame.dispose(); // Fechar a tela de login
-                    openSelectTablesScreen(); // Abrir a próxima tela
-				
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Senha Incorreta");
-				}
-			}
+        JLabel lblUser = new JLabel("Nome de Usuário");
+        lblUser.setBounds(372, 141, 178, 25);
+        lblUser.setFont(new Font("Arial", Font.PLAIN, 21));
+        frame.getContentPane().add(lblUser);
 
-			private boolean checkLogin(String login, String password) {
-				return login.equals("Isabel") && password.equals("123");
-			}
-			 private void openSelectTablesScreen() {
-	                EventQueue.invokeLater(new Runnable() {
-	                    public void run() {
-	                        try {
-	                            SelectTablesScreen window = new SelectTablesScreen();
-	                            window.getFrame().setVisible(true);
-	                        } catch (Exception e) {
-	                            e.printStackTrace();
-	                        }
-	                    }
-	                });
-	            }
-		});
-		btnEnter.setBounds(223, 158, 89, 23);
-		frame.getContentPane().add(btnEnter);
-	}
-	 public JFrame getFrame() {
-	        return frame;
-	    }
+        textFieldUser = new JTextField();
+        textFieldUser.setBounds(560, 141, 200, 25);
+        frame.getContentPane().add(textFieldUser);
+        textFieldUser.setColumns(10);
+
+        JLabel lblPassword = new JLabel("Senha");
+        lblPassword.setBounds(372, 214, 178, 25);
+        lblPassword.setFont(new Font("Arial", Font.PLAIN, 21));
+        frame.getContentPane().add(lblPassword);
+
+        textFieldPassword = new JPasswordField();
+        textFieldPassword.setBounds(560, 214, 200, 25);
+        frame.getContentPane().add(textFieldPassword);
+
+        JButton btnLogin = new JButton("Login");
+        btnLogin.setBounds(614, 290, 100, 25);
+        frame.getContentPane().add(btnLogin);
+
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String userName = textFieldUser.getText();
+                String password = new String(textFieldPassword.getPassword());
+
+                boolean sucesso = loginService.verificarLogin(userName, password);
+
+                if (sucesso) {
+                    JOptionPane.showMessageDialog(frame, "Login bem-sucedido!");
+                    frame.dispose(); 
+                    openSelectTablesScreen(); 
+
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nome de usuário ou senha inválidos.", "Erro de Login", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+    
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
+    }
+
+    private void openSelectTablesScreen() {
+        EventQueue.invokeLater(() -> {
+                try {
+                    SelectTablesScreen window = new SelectTablesScreen();
+                    window.getFrame().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        });
+    }
 }

@@ -6,8 +6,9 @@ import java.sql.SQLException;
 
 public class UpdateSQL {
 	
-	public void update (String marca, int id) {
-        String modificar = "UPDATE camisetas SET marca=? WHERE id=?";
+	public void update (String marca, String tamanho, int quant, int id) {
+        String modificar = 
+        "UPDATE camisetas SET marca=?, tamanho=?, quant=? WHERE id=?";
         
         ConnectDB conexaoDB = new ConnectDB();
         Connection conexcao = conexaoDB.connectToBank();
@@ -16,7 +17,9 @@ public class UpdateSQL {
         try (PreparedStatement pstm = conexcao.prepareStatement(modificar)) {
                 
                 pstm.setString(1, marca);
-                pstm.setInt(2, id);
+                pstm.setString(2, tamanho);
+                pstm.setInt(3, quant);
+                pstm.setInt(4, id);
                 int linhasAfetadas = pstm.executeUpdate();
                 
             if (linhasAfetadas > 0) {
