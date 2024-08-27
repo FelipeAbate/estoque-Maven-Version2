@@ -15,7 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 
 import java.util.List;
 
@@ -24,12 +30,12 @@ public class ScreenTableTshirts {
     JFrame frame;
     private JTable table;
     private DefaultTableModel model;
-    private JTextField textFieldDeleteProduct;
+
     private JTextField textFieldSearchProduct;
     private JTextField textFieldProductBrand;
     private JTextField textFieldProductQuantity;
     private JTextField textFieldRegisterTamanhoProduct;
-    private JTextField textFieldUpdateAndCadaster;
+    private TableRowSorter<DefaultTableModel> sorter;
     
 
     public static void main(String[] args) {
@@ -55,15 +61,17 @@ public class ScreenTableTshirts {
         frame.getContentPane().setLayout(null);
 
         model = new DefaultTableModel(
-            new Object[][] {
-            	{"      "}
-            },
+            new Object[][] {{"      "}},
             new String[] {"id", "marca", "tamanho", "quant"}
         ) {
          
         };
 
         table = new JTable(model);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Permitir apenas uma linha selecionada
+        sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(100, 136, 700, 417); 
         frame.getContentPane().add(scrollPane);
@@ -96,8 +104,66 @@ public class ScreenTableTshirts {
         textFieldProductQuantity.setBounds(655, 25, 142, 20);
         frame.getContentPane().add(textFieldProductQuantity);
 
+        JLabel lblSearchProduct = new JLabel("Pesquisar Produto");
+        lblSearchProduct.setBounds(100, 65, 200, 16);
+        lblSearchProduct.setFont(new Font("Arial", Font.PLAIN, 21));
+        frame.getContentPane().add(lblSearchProduct);
+
+        // Implementação do campo de pesquisa
+        textFieldSearchProduct = new JTextField();
+        textFieldSearchProduct.setBounds(310, 65, 142, 20);
+        frame.getContentPane().add(textFieldSearchProduct);
+
+        // Adicionar o DocumentListener para o campo de pesquisa
+textFieldSearchProduct.getDocument().addDocumentListener(new DocumentListener() {
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        filter();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        filter();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        filter();
+    }
+
+    // Método que aplica o filtro baseado no texto inserido
+    private void filter() {
+        String searchText = textFieldSearchProduct.getText().trim();
+        if (searchText.length() == 0) {
+            sorter.setRowFilter(null);  // Remove o filtro se o campo de pesquisa estiver vazio
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, 1)); // Aplica o filtro na coluna "marca" (índice 1)
+        }
+    }
+});
+
+        JButton deletedProduct = new JButton("Excluir");
+        deletedProduct.setBounds(507, 64, 118, 20);
+        frame.getContentPane().add(deletedProduct);
+
+        deletedProduct.addActionListener(e -> {
+    int selectedRow = table.getSelectedRow();
+    if (selectedRow != -1) {
+        // Converter o índice da linha para o modelo
+        selectedRow = table.convertRowIndexToModel(selectedRow);
+        // Obter o ID da linha selecionada (assumindo que a coluna 0 é o ID)
+        int id = (int) model.getValueAt(selectedRow, 0);
+        deleteFromDatabase(id);
+        model.removeRow(selectedRow);// Remover a linha da tabela
+        
+        JOptionPane.showMessageDialog(frame, "Produto excluído com sucesso.");
+    } else {
+        JOptionPane.showMessageDialog(frame, "Selecione um produto para excluir.");
+    }
+});
+
         JButton saveButton = new JButton("Salvar");
-        saveButton.setBounds(495, 65, 118, 20);
+        saveButton.setBounds(678, 64, 118, 20);
         frame.getContentPane().add(saveButton);
          
         saveButton.addActionListener(e -> {
@@ -122,33 +188,6 @@ public class ScreenTableTshirts {
         });
 
         saveButton.addActionListener(e -> saveTableChanges());
-
-        JLabel deletedProduct = new JLabel("Deletar Produto");
-        deletedProduct.setBounds(100, 102, 200, 16);
-        deletedProduct.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(deletedProduct);
-
-        textFieldDeleteProduct = new JTextField();
-        textFieldDeleteProduct.setBounds(310, 62, 142, 20);
-        frame.getContentPane().add(textFieldDeleteProduct);
-        
-        JLabel lblupdateAndCadaster = new JLabel("Editar Produto");
-        lblupdateAndCadaster.setBounds(100, 65, 200, 16);
-        lblupdateAndCadaster.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(lblupdateAndCadaster);
-        
-        textFieldUpdateAndCadaster = new JTextField();
-        textFieldUpdateAndCadaster.setBounds(310, 99, 142, 20);
-        frame.getContentPane().add(textFieldUpdateAndCadaster);
-        
-        JLabel lblSearchProduct = new JLabel("Pesquisar Produto");
-        lblSearchProduct.setBounds(880, 28, 200, 16);
-        lblSearchProduct.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(lblSearchProduct);
-        
-        textFieldSearchProduct = new JTextField();
-        textFieldSearchProduct.setBounds(1060, 25, 233, 20);
-        frame.getContentPane().add(textFieldSearchProduct);
 
     }
 
@@ -188,6 +227,23 @@ public class ScreenTableTshirts {
             }
         } else {
             System.out.println("Não foi possível conectar ao banco de dados.");
+        }
+    }
+
+    private void deleteFromDatabase(int id) {
+        String deleteSQL = "DELETE FROM camisetas WHERE id = ?";
+        try (Connection connection = new ConnectDB().connectToBank();
+             PreparedStatement psmt = connection.prepareStatement(deleteSQL)) {
+
+            psmt.setInt(1, id);
+            int rowsAffected = psmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Produto excluído com sucesso.");
+            } else {
+                System.out.println("Nenhum produto foi encontrado com o ID fornecido.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
