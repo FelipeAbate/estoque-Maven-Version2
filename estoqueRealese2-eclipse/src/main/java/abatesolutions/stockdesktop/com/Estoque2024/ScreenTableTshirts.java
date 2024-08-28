@@ -82,9 +82,10 @@ public class ScreenTableTshirts {
             }
         }
 
-        JButton returSelectTables = new JButton("< return");
+        JButton returSelectTables = new JButton("< voltar");
         returSelectTables.setBounds(0, 0, 90, 17);
         frame.getContentPane().add(returSelectTables);
+
         returSelectTables.addActionListener(e -> returnSelectTablesScreen());
 
         JLabel lblregisterProduct = new JLabel("Cadastrar Produto");
@@ -115,52 +116,53 @@ public class ScreenTableTshirts {
         frame.getContentPane().add(textFieldSearchProduct);
 
         // Adicionar o DocumentListener para o campo de pesquisa
-textFieldSearchProduct.getDocument().addDocumentListener(new DocumentListener() {
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-        filter();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        filter();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        filter();
-    }
-
-    // Método que aplica o filtro baseado no texto inserido
-    private void filter() {
-        String searchText = textFieldSearchProduct.getText().trim();
-        if (searchText.length() == 0) {
-            sorter.setRowFilter(null);  // Remove o filtro se o campo de pesquisa estiver vazio
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, 1)); // Aplica o filtro na coluna "marca" (índice 1)
+        textFieldSearchProduct.getDocument().addDocumentListener(new DocumentListener() {
+           @Override
+              public void insertUpdate(DocumentEvent e) {
+                 filter();
         }
-    }
-});
+
+           @Override
+              public void removeUpdate(DocumentEvent e) {
+                 filter();
+        }
+
+           @Override
+              public void changedUpdate(DocumentEvent e) {
+                 filter();
+        }
+
+        // Método que aplica o filtro baseado no texto inserido
+              private void filter() {
+                String searchText = textFieldSearchProduct.getText().trim();
+                    if (searchText.length() == 0) {
+                         sorter.setRowFilter(null);  // Remove o filtro se o campo de pesquisa estiver vazio
+                    } else {
+                         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, 1)); // Aplica o filtro na coluna "marca" (índice 1)
+                    }
+               }
+        });
 
         JButton deletedProduct = new JButton("Excluir");
         deletedProduct.setBounds(507, 64, 118, 20);
         frame.getContentPane().add(deletedProduct);
 
         deletedProduct.addActionListener(e -> {
-    int selectedRow = table.getSelectedRow();
-    if (selectedRow != -1) {
-        // Converter o índice da linha para o modelo
-        selectedRow = table.convertRowIndexToModel(selectedRow);
-        // Obter o ID da linha selecionada (assumindo que a coluna 0 é o ID)
-        int id = (int) model.getValueAt(selectedRow, 0);
-        deleteFromDatabase(id);
-        model.removeRow(selectedRow);// Remover a linha da tabela
+            int selectedRow = table.getSelectedRow();
+
+            if (selectedRow != -1) {
+                 // Converter o índice da linha para o modelo
+                selectedRow = table.convertRowIndexToModel(selectedRow);
+                // Obter o ID da linha selecionada (assumindo que a coluna 0 é o ID)
+                int id = (int) model.getValueAt(selectedRow, 0);
+                deleteFromDatabase(id);
+                model.removeRow(selectedRow);// Remover a linha da tabela
         
-        JOptionPane.showMessageDialog(frame, "Produto excluído com sucesso.");
-    } else {
-        JOptionPane.showMessageDialog(frame, "Selecione um produto para excluir.");
-    }
-});
+                JOptionPane.showMessageDialog(frame, "Produto excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Selecione um produto para excluir.");
+            }
+        });
 
         JButton saveButton = new JButton("Salvar");
         saveButton.setBounds(678, 64, 118, 20);
@@ -188,7 +190,6 @@ textFieldSearchProduct.getDocument().addDocumentListener(new DocumentListener() 
         });
 
         saveButton.addActionListener(e -> saveTableChanges());
-
     }
 
     public void setVisible(boolean visible) {
