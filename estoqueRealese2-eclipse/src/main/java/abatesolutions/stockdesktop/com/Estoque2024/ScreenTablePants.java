@@ -24,9 +24,6 @@ public class ScreenTablePants {
     private JTextField textFieldRegisterTypeProduct;
     private JTextField textFieldProductQuantity;
     private JTextField textFieldRegisterTamanhoProduct;
-    private JTextField textFieldDeleteProduct;
-    private JTextField textFieldSearchProduct;
-
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -70,7 +67,7 @@ public class ScreenTablePants {
             }
         }
 
-        JButton returSelectTables = new JButton("< return");
+        JButton returSelectTables = new JButton("< voltar");
         returSelectTables.setBounds(0, 0, 90, 17);
         frame.getContentPane().add(returSelectTables);
         returSelectTables.addActionListener(e -> returnSelectTablesScreen());
@@ -116,34 +113,6 @@ public class ScreenTablePants {
             textFieldRegisterTamanhoProduct.setText("");
             textFieldProductQuantity.setText("");
         });
-     
-        JLabel deletedProduct = new JLabel("Deletar Produto");
-        deletedProduct.setBounds(100, 102, 200, 16);
-        deletedProduct.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(deletedProduct);
-
-        textFieldDeleteProduct = new JTextField();
-        textFieldDeleteProduct.setBounds(310, 62, 142, 20);
-        frame.getContentPane().add(textFieldDeleteProduct);
-        
-        JLabel lblupdateAndCadaster = new JLabel("Editar Produto");
-        lblupdateAndCadaster.setBounds(100, 65, 200, 16);
-        lblupdateAndCadaster.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(lblupdateAndCadaster);
-        
-        JTextField textFieldUpdateAndCadaster = new JTextField();
-        textFieldUpdateAndCadaster.setBounds(310, 99, 142, 20);
-        frame.getContentPane().add(textFieldUpdateAndCadaster);
-        
-        JLabel lblSearchProduct = new JLabel("Pesquisar Produto");
-        lblSearchProduct.setBounds(880, 28, 200, 16);
-        lblSearchProduct.setFont(new Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(lblSearchProduct);
-        
-        textFieldSearchProduct = new JTextField();
-        textFieldSearchProduct.setBounds(1060, 25, 233, 20);
-        frame.getContentPane().add(textFieldSearchProduct);
-
     }
 
     public void setVisible(boolean visible) {

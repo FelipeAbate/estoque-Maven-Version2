@@ -11,10 +11,6 @@ public class App {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
-
-    //DeleteSQL deletePants = new DeleteSQL();
-    //deletePants.deleteInPants(18);   
-        
+        });   
 	}
 }
