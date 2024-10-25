@@ -58,7 +58,7 @@ public class ScreenTablePants {
 
         table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(100, 136, 700, 417); 
+        scrollPane.setBounds(66, 300, 950, 350); 
         frame.getContentPane().add(scrollPane); 
 
         if (data != null) {
@@ -72,13 +72,14 @@ public class ScreenTablePants {
         frame.getContentPane().add(returSelectTables);
         returSelectTables.addActionListener(e -> returnSelectTablesScreen());
         
-        JLabel lblregisterProduct = new JLabel("Cadastrar Produto");
-        lblregisterProduct.setBounds(100, 28, 200, 16);
-        lblregisterProduct.setFont(new Font("Arial", Font.PLAIN, 21));
+        JLabel lblregisterProduct = new JLabel("CADASTRAR PRODUTO");
+        lblregisterProduct.setBounds(66, 46, 300, 25);
+        lblregisterProduct.setFont(new Font("Arial", Font.PLAIN, 24));
+        lblregisterProduct.setForeground(new Color(255, 255, 255));
         frame.getContentPane().add(lblregisterProduct);
         
         textFieldRegisterTypeProduct = new JTextField();
-        textFieldRegisterTypeProduct.setBounds(310, 25, 142, 20);
+        textFieldRegisterTypeProduct.setBounds(66, 240, 142, 20);
         frame.getContentPane().add(textFieldRegisterTypeProduct);
         
         textFieldRegisterTamanhoProduct = new JTextField();
@@ -92,8 +93,8 @@ public class ScreenTablePants {
         JButton saveButton = new JButton("Salvar");
         saveButton.setBounds(495, 65, 118, 20);
         frame.getContentPane().add(saveButton);
-
         saveButton.addActionListener(e -> {
+
             String tipo = textFieldRegisterTypeProduct.getText();
             String tamanho = textFieldRegisterTamanhoProduct.getText();
             String quant = textFieldProductQuantity.getText();
@@ -206,7 +207,7 @@ public class ScreenTablePants {
         EventQueue.invokeLater(() -> {
                 try {
                     frame.dispose();
-                    SelectTablesScreen window = new SelectTablesScreen();
+                    ScreenProducts window = new ScreenProducts();
                     window.getFrame().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

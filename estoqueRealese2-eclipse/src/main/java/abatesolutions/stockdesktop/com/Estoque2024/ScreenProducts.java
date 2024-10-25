@@ -2,6 +2,8 @@ package abatesolutions.stockdesktop.com.Estoque2024;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -9,14 +11,14 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class SelectTablesScreen {
+public class ScreenProducts {
 
     private JFrame frame;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-                SelectTablesScreen window = new SelectTablesScreen();
+                ScreenProducts window = new ScreenProducts();
                 window.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -24,7 +26,7 @@ public class SelectTablesScreen {
         });
     }
 
-    public SelectTablesScreen() {
+    public ScreenProducts() {
         initialize();
     }
 
@@ -35,16 +37,20 @@ public class SelectTablesScreen {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        JLabel lblTables = new JLabel("TABELAS");
-        lblTables.setBounds(109, 11, 117, 23);
-        frame.getContentPane().add(lblTables);
+        JButton returSelectTables = new JButton("< voltar");
+        returSelectTables.setBounds(0, 0, 90, 17);
+        frame.getContentPane().add(returSelectTables);
+        returSelectTables.addActionListener(e -> returnScreenMenu());
 
-        JLabel lblTableShirts = new JLabel("Camisetas");
-        lblTableShirts.setBounds(67, 68, 61, 23);
-        frame.getContentPane().add(lblTableShirts);
-
-        JButton buttonTableShirts = new JButton("Ver");
-        buttonTableShirts.setBounds(138, 68, 61, 23);
+        JLabel lblProduct = new JLabel("PRODUTOS");
+        lblProduct.setBounds(32, 40, 160, 54);
+        lblProduct.setForeground(new Color(255, 255, 255));
+        lblProduct.setFont(new Font("Arial", Font.PLAIN, 26));
+        frame.getContentPane().add(lblProduct);
+        
+        JButton buttonTableShirts = new JButton("CAMISETAS");
+        buttonTableShirts.setBounds(32, 102, 685, 38);
+        buttonTableShirts.setFont(new  Font("Arial", Font.PLAIN, 21));
         frame.getContentPane().add(buttonTableShirts);
         buttonTableShirts.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -54,12 +60,9 @@ public class SelectTablesScreen {
             }
         });
 
-        JLabel lblTablePants = new JLabel("Calças");
-        lblTablePants.setBounds(67, 117, 52, 14);
-        frame.getContentPane().add(lblTablePants);
-        
-        JButton btnSelectTableViewPants = new JButton("Ver");
-        btnSelectTableViewPants.setBounds(138, 117, 61, 23);
+        JButton btnSelectTableViewPants = new JButton("CALÇAS");
+        btnSelectTableViewPants.setBounds(32, 198, 685, 38);
+        btnSelectTableViewPants.setFont(new  Font("Arial", Font.PLAIN, 21));
         frame.getContentPane().add(btnSelectTableViewPants);
         btnSelectTableViewPants.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +71,7 @@ public class SelectTablesScreen {
                 openScreenTablePants(dad);
             }
         });
+
     }
 
     public void setVisible(boolean visible) {
@@ -85,6 +89,18 @@ public class SelectTablesScreen {
             }
         });
     }
+
+    private void returnScreenMenu() {
+        EventQueue.invokeLater(() -> {
+                try {
+                    frame.dispose();
+                    ScreenMenu window = new ScreenMenu();
+                    window.getFrame().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        });
+    }    
 
     private void openScreenTablePants(List<Object[]> dad) {
         EventQueue.invokeLater(() -> {

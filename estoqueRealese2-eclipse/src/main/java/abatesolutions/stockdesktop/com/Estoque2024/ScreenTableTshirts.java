@@ -33,8 +33,10 @@ public class ScreenTableTshirts {
 
     private JTextField textFieldSearchProduct;
     private JTextField textFieldProductBrand;
-    private JTextField textFieldProductQuantity;
     private JTextField textFieldRegisterTamanhoProduct;
+    private JTextField textFieldProductQuantity;
+    private JTextField textFieldProductPrecoUn;
+    
     private TableRowSorter<DefaultTableModel> sorter;
     
 
@@ -62,7 +64,7 @@ public class ScreenTableTshirts {
 
         model = new DefaultTableModel(
             new Object[][] {{"      "}},
-            new String[] {"id", "marca", "tamanho", "quant"}
+            new String[] {"id", "marca", "tamanho", "quant", "preco_un"}
         ) {
          
         };
@@ -73,7 +75,7 @@ public class ScreenTableTshirts {
         table.setRowSorter(sorter);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(100, 136, 700, 417); 
+        scrollPane.setBounds(66, 300, 950, 350); 
         frame.getContentPane().add(scrollPane);
 
         if (data != null) {
@@ -88,31 +90,37 @@ public class ScreenTableTshirts {
 
         returSelectTables.addActionListener(e -> returnSelectTablesScreen());
 
-        JLabel lblregisterProduct = new JLabel("Cadastrar Produto");
-        lblregisterProduct.setBounds(100, 28, 200, 16);
-        lblregisterProduct.setFont(new Font("Arial", Font.PLAIN, 21));
+        JLabel lblregisterProduct = new JLabel("Cadastrar");
+        lblregisterProduct.setBounds(66, 230, 162, 25);
+        lblregisterProduct.setFont(new Font("Arial", Font.PLAIN, 29));
+        lblregisterProduct.setForeground(new Color(255, 255, 255));
         frame.getContentPane().add(lblregisterProduct);
         
         textFieldProductBrand = new JTextField();
-        textFieldProductBrand.setBounds(310, 25, 142, 20);
+        textFieldProductBrand.setBounds(255, 238, 184, 20);
         frame.getContentPane().add(textFieldProductBrand);
         
         textFieldRegisterTamanhoProduct = new JTextField();
-        textFieldRegisterTamanhoProduct.setBounds(485, 25, 142, 20);
+        textFieldRegisterTamanhoProduct.setBounds(455, 238, 173, 20);
         frame.getContentPane().add(textFieldRegisterTamanhoProduct);
         
         textFieldProductQuantity = new JTextField();
-        textFieldProductQuantity.setBounds(655, 25, 142, 20);
+        textFieldProductQuantity.setBounds(638, 238, 184, 20);
         frame.getContentPane().add(textFieldProductQuantity);
 
-        JLabel lblSearchProduct = new JLabel("Pesquisar Produto");
-        lblSearchProduct.setBounds(100, 65, 200, 16);
-        lblSearchProduct.setFont(new Font("Arial", Font.PLAIN, 21));
+        textFieldProductPrecoUn = new JTextField();
+        textFieldProductPrecoUn.setBounds(832, 238, 184, 20);
+        frame.getContentPane().add(textFieldProductPrecoUn);
+
+        JLabel lblSearchProduct = new JLabel("Pesquisar");
+        lblSearchProduct.setBounds(68, 120, 160, 35);
+        lblSearchProduct.setFont(new Font("Arial", Font.PLAIN, 29));
+        lblSearchProduct.setForeground(new Color(255, 255, 255));
         frame.getContentPane().add(lblSearchProduct);
 
         // Implementação do campo de pesquisa
         textFieldSearchProduct = new JTextField();
-        textFieldSearchProduct.setBounds(310, 65, 142, 20);
+        textFieldSearchProduct.setBounds(255, 133, 184, 20);
         frame.getContentPane().add(textFieldSearchProduct);
 
         // Adicionar o DocumentListener para o campo de pesquisa
@@ -144,7 +152,7 @@ public class ScreenTableTshirts {
         });
 
         JButton deletedProduct = new JButton("Excluir");
-        deletedProduct.setBounds(507, 64, 118, 20);
+        deletedProduct.setBounds(455, 133, 118, 20);
         frame.getContentPane().add(deletedProduct);
 
         deletedProduct.addActionListener(e -> {
@@ -165,28 +173,31 @@ public class ScreenTableTshirts {
         });
 
         JButton saveButton = new JButton("Salvar");
-        saveButton.setBounds(678, 64, 118, 20);
+        saveButton.setBounds(898, 269, 118, 20);
         frame.getContentPane().add(saveButton);
          
         saveButton.addActionListener(e -> {
             String marca = textFieldProductBrand.getText();
             String tamanho = textFieldRegisterTamanhoProduct.getText();
             String quant = textFieldProductQuantity.getText();
+            String preco_un = textFieldProductPrecoUn.getText();
             
             try {
                 Integer.parseInt(quant);
+                Float.parseFloat(preco_un);
             } catch (NumberFormatException ex) {
                 System.out.println("Quantidade deve ser um número válido.");
                 return;
             }
         
-            insertInTShirts(marca, tamanho, quant);
-            model.addRow(new Object[]{null, marca, tamanho, quant});
+            insertInTShirts(marca, tamanho, quant, preco_un);
+            model.addRow(new Object[]{null, marca, tamanho, quant, preco_un});
         
             // Limpar os campos de texto
             textFieldProductBrand.setText("");
             textFieldRegisterTamanhoProduct.setText("");
             textFieldProductQuantity.setText("");
+            textFieldProductPrecoUn.setText("");
         });
 
         saveButton.addActionListener(e -> saveTableChanges());
@@ -196,14 +207,15 @@ public class ScreenTableTshirts {
         frame.setVisible(visible);
     }
 
-    public void insertInTShirts(String marca, String tamanho, String quant){
+    public void insertInTShirts(String marca, String tamanho, String quant, String preco_un){
 		
-        String inserirSQL = "INSERT INTO camisetas (marca, tamanho, quant) VALUES (?, ?, ?)";
+        String inserirSQL = "INSERT INTO camisetas (marca, tamanho, quant, preco_un) VALUES (?, ?, ?, ?)";
         
         ConnectDB conexaoDB = new ConnectDB();
         Connection conexcao = conexaoDB.connectToBank();
 
         int quantInt = Integer.parseInt(quant);
+        Float precFloat = Float.parseFloat(preco_un);
 
         if (conexcao != null) {
             try (PreparedStatement psmt = conexcao.prepareStatement(inserirSQL)) {
@@ -211,6 +223,7 @@ public class ScreenTableTshirts {
                 psmt.setString(1, marca);
                 psmt.setString(2, tamanho);
                 psmt.setInt(3, quantInt);
+                psmt.setFloat(4, precFloat);
 
                 int linhasAfetadas = psmt.executeUpdate();
 
@@ -257,9 +270,9 @@ public class ScreenTableTshirts {
             String marca = (String) model.getValueAt(i, 1);
             String tamanho = (String) model.getValueAt(i, 2);
             int quant = Integer.parseInt(model.getValueAt(i, 3).toString());
-
+            Float preco_un = Float.parseFloat(model.getValueAt(i, 4).toString()); 
             // Atualizar o banco de dados para a linha atual
-            updateSQL.update(marca, tamanho, quant, id);
+            updateSQL.update(marca, tamanho, quant, preco_un, id);
         }
 
         JOptionPane.showMessageDialog(frame, "Salvo com sucesso");
@@ -269,7 +282,7 @@ public class ScreenTableTshirts {
         EventQueue.invokeLater(() -> {
                 try {
                     frame.dispose();
-                    SelectTablesScreen window = new SelectTablesScreen();
+                    ScreenProducts window = new ScreenProducts();
                     window.getFrame().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -280,5 +293,4 @@ public class ScreenTableTshirts {
     public JFrame getFrame() {
         return frame;
     }
-
 }

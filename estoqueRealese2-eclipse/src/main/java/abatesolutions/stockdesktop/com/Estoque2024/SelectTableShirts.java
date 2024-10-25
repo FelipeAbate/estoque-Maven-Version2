@@ -26,8 +26,9 @@ public class SelectTableShirts {
                 String marca = rs.getString("marca");
                 String tamanho = rs.getString("tamanho");
                 int quant = rs.getInt("quant");
+                Float preco_un = rs.getFloat("preco_un");
 
-                data.add(new Object[]{id, marca, tamanho, quant});
+                data.add(new Object[]{id, marca, tamanho, quant, preco_un});
             }
         } catch (SQLException e) {
             System.err.println("Erro ao executar SELECT: " + e.getMessage());

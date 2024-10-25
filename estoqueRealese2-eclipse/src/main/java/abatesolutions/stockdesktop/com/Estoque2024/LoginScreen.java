@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
 public class LoginScreen {
 
     JFrame frame;
@@ -33,8 +34,9 @@ public class LoginScreen {
         frame.getContentPane().setLayout(null);
 
         JLabel lblUser = new JLabel("Nome de Usuário");
-        lblUser.setBounds(372, 141, 178, 25);
-        lblUser.setFont(new Font("Arial", Font.PLAIN, 21));
+        lblUser.setBounds(347, 141, 200, 25);
+        lblUser.setFont(new Font("Arial", Font.PLAIN, 25));
+        lblUser.setForeground(new Color(255, 255, 255));
         frame.getContentPane().add(lblUser);
 
         textFieldUser = new JTextField();
@@ -43,8 +45,9 @@ public class LoginScreen {
         textFieldUser.setColumns(10);
 
         JLabel lblPassword = new JLabel("Senha");
-        lblPassword.setBounds(372, 214, 178, 25);
-        lblPassword.setFont(new Font("Arial", Font.PLAIN, 21));
+        lblPassword.setBounds(409, 214, 178, 25);
+        lblPassword.setFont(new Font("Arial", Font.PLAIN, 24));
+        lblPassword.setForeground(new Color(255,255,255));
         frame.getContentPane().add(lblPassword);
 
         textFieldPassword = new JPasswordField();
@@ -66,7 +69,7 @@ public class LoginScreen {
                 if (sucesso) {
                     JOptionPane.showMessageDialog(frame, "Login bem-sucedido!");
                     frame.dispose(); 
-                    openSelectTablesScreen(); 
+                    openScreenMenu(); 
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nome de usuário ou senha inválidos.", "Erro de Login", JOptionPane.ERROR_MESSAGE);
@@ -79,10 +82,10 @@ public class LoginScreen {
         frame.setVisible(visible);
     }
 
-    private void openSelectTablesScreen() {
+    private void openScreenMenu() {
         EventQueue.invokeLater(() -> {
                 try {
-                    SelectTablesScreen window = new SelectTablesScreen();
+                    ScreenMenu window = new ScreenMenu();
                     window.getFrame().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
