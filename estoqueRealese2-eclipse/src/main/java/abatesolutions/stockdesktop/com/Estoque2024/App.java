@@ -1,7 +1,6 @@
 package abatesolutions.stockdesktop.com.Estoque2024;
 
 import java.awt.EventQueue;
-
 public class App {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {

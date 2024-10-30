@@ -54,8 +54,8 @@ public class ScreenProducts {
         frame.getContentPane().add(buttonTableShirts);
         buttonTableShirts.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SelectTableShirts selectAll = new SelectTableShirts();
-                List<Object[]> data = selectAll.selectAllFromCamisetas();
+                ScreenTableTshirts selectAll = new ScreenTableTshirts(null);
+                List<Object[]> data = selectAll.selectFrom();
                 openScreenTableTShirts(data);
             }
         });
@@ -66,9 +66,9 @@ public class ScreenProducts {
         frame.getContentPane().add(btnSelectTableViewPants);
         btnSelectTableViewPants.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SelectTablePants selectAll = new SelectTablePants();
-                List<Object[]> dad = selectAll.selectAllFromPants();
-                openScreenTablePants(dad);
+                ScreenTablePants selectAll = new ScreenTablePants(null);
+                List<Object[]> data = selectAll.selectFrom();
+                openScreenTablePants(data);
             }
         });
 

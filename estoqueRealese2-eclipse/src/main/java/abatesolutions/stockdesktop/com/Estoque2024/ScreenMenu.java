@@ -3,7 +3,9 @@ package abatesolutions.stockdesktop.com.Estoque2024;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -53,14 +55,28 @@ public class ScreenMenu {
         btnVendas.setBounds(32, 198, 685, 38);
         btnVendas.setFont(new  Font("Arial", Font.PLAIN, 21));
         frame.getContentPane().add(btnVendas);
+        btnVendas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ScreenVendas selectAll = new ScreenVendas(null);
+                List<Object[]> data = selectAll.selectFrom();
+                openScreenVendas(data);
+            }
+        });
         
-        JButton btnFinanceiro = new JButton("FINANCEIRO");
-        btnFinanceiro.setBounds(32, 289, 685, 38);
-        btnFinanceiro.setFont(new  Font("Arial", Font.PLAIN, 21));
-        frame.getContentPane().add(btnFinanceiro);
-        btnFinanceiro.addActionListener(e -> openScreenFinances());
+        JButton btnClient = new JButton("CLIENTES");
+        btnClient.setBounds(32, 289, 685, 38);
+        btnClient.setFont(new  Font("Arial", Font.PLAIN, 21));
+        frame.getContentPane().add(btnClient);
+        btnClient.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ScreenClientes selectAll = new ScreenClientes(null);
+                List<Object[]> data = selectAll.selectFrom();
+                openScreenClient(data);
+            }
+        });
         
 	}
+
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
     }
@@ -76,10 +92,21 @@ public class ScreenMenu {
         });
     }
 
-    private void openScreenFinances() {
+    private void openScreenClient(List<Object[]> data) {
         EventQueue.invokeLater(() -> {
                 try {
-                    ScreenFinances window = new ScreenFinances();
+                    ScreenClientes window = new ScreenClientes(data);
+                    window.getFrame().setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        });
+    }
+
+    private void openScreenVendas(List<Object[]> data) {
+        EventQueue.invokeLater(() -> {
+                try {
+                    ScreenVendas window = new ScreenVendas(data);
                     window.getFrame().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
